@@ -6,7 +6,7 @@ DESTINATION=/var/www/repo/$ORGANIZATION
 TARGET=$DESTINATION/$MODULE-$VERSION.zip
 
 rm -fr dist
-play dependencies --sync || exit $?
+play dependencies || exit $?
 play build-module || exit $?
 
 if [ -d $DESTINATION ]; then
