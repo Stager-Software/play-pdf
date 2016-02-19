@@ -1,0 +1,15 @@
+## Changelog
+
+### 1.2
+
+ * do not store dependencies local; fetch all jars from maven central.
+
+### 1.1
+
+ * store dependencies in "jars" folder instead of "lib". It fixes "play deps --sync" work.
+
+### 1.0
+
+ * code cleanup
+ * update dependencies: xml-apis.jar, shaniparser.jar
+ * fork & release the old play--pdf 0.x (created by Nicolas Leroux)

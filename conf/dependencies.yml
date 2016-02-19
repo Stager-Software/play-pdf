@@ -1,31 +1,7 @@
-self: play-pdf -> pdf 1.1
+self: play-pdf -> pdf 1.2
 
 require:
-    - play [1.3,1.4]
-    - core-renderer -> core-renderer latest.integration
-    - itext -> itext 2.1.7
-    - jaxen -> jaxen 1.1.1
-    - jtidy-r938 -> jtidy-r938 latest.integration
-    - shaniparser -> shaniparser 1.4.22
-    - shaniparser-xmlapi -> shaniparser-xmlapi 1.4.22
-    - yahp -> yahp latest.integration
-    - yahp-internal -> yahp-internal latest.integration
-
-repositories:
-    - local-jars:
-        type:       local
-        artifact:   ${application.path}/jars/[module].jar
-        contains:
-            - core-renderer
-            - jtidy-r938
-            - yahp
-            - yahp-internal
-
-    - local-jars-versioned:
-        type:       local
-        artifact:   ${application.path}/jars/[module]-[revision].jar
-        contains:
-            - itext
-            - jaxen
-            - shaniparser
-            - shaniparser-xmlapi
+    - play [1.2,1.4]
+    - com.google.code.maven-play-plugin.org.allcolor.yahp -> yahp-internal 1.3-patched-play-pdf-0.8:
+        exclude:
+            - log4j
