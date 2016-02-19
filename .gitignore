@@ -1,6 +1,6 @@
 /.settings
 dist
-lib/play-pdf.jar
+jars/play-pdf.jar
 samples-and-tests/pdf/tmp
 samples-and-tests/pdf/log
 build.cmd
