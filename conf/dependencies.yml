@@ -2,6 +2,33 @@ self: play-pdf -> pdf 1.3
 
 require:
     - play [1.2,1.4]
-    - com.google.code.maven-play-plugin.org.allcolor.yahp -> yahp-internal 1.3-patched-play-pdf-0.8:
+    - org.allcolor -> shaniparser 1.4.22
+    - com.google.code.maven-play-plugin.org.xhtmlrenderer -> core-renderer 2011.04.16-patched-play-pdf-0.8
+    - com.google.code.maven-play-plugin.org.allcolor.yahp -> yahp 1.3
+    - com.google.code.maven-play-plugin.org.allcolor.yahp -> yahp-internal 1.3:
         exclude:
             - log4j
+            - com.google.code.maven-play-plugin.org.allcolor.shanidom -> jaxen
+            - com.google.code.maven-play-plugin.org.allcolor.shanidom -> shani-parser
+
+#    - com.google.code.maven-play-plugin.org.allcolor.yahp -> yahp-internal 1.3-patched-play-pdf-0.8:
+#        exclude:
+#            - log4j
+#            - com.google.code.maven-play-plugin.org.allcolor.shanidom -> jaxen
+#            - com.google.code.maven-play-plugin.org.allcolor.shanidom -> shani-parser
+
+repositories:
+    - bintray-allcolor:
+        type:       iBiblio
+        root:       "https://dl.bintray.com/allcolor/alc-web"
+        contains:
+            - org.allcolor
+    
+    - bintray:
+        type:       iBiblio
+        root:       "https://jcenter.bintray.com"
+        contains:
+            - com.google.code.maven-play-plugin.org.xhtmlrenderer
+            - com.google.code.maven-play-plugin.org.allcolor.yahp
+
+  
