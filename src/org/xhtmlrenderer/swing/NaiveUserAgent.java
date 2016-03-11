@@ -330,7 +330,8 @@ public class NaiveUserAgent implements UserAgentCallback, DocumentListener {
     // test if the URI is valid; if not, try to assign the base url as its parent
     try {
       // try to find it in play
-      VirtualFile file = Play.getVirtualFile(uri);
+      String filePath = uri.replaceFirst("\\?.*", "");
+      VirtualFile file = Play.getVirtualFile(filePath);
       logger.debug("Resolved uri {} to file {}", uri, file == null ? null : file.getRealFile().getAbsolutePath());
       if (file != null && file.exists())
         return file.getRealFile().toURI().toURL().toExternalForm();

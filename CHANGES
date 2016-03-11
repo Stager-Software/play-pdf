@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.4
+
+ * ignore url params when resolving local file (like /public/stylesheets/main.css?13564353)
+
 ### 1.3
 
  * fix bug with removing original of hacked classes from core-renderer.jar and yahp-internal.jar
