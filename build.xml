@@ -16,7 +16,7 @@
         </fileset>
     </path>
 
-    <target name="build" depends="updateLibraries, compile" description="Build module">
+    <target name="build" depends="updateLibraries, compile, test" description="Build module">
         <copy todir="tmp/classes">
             <fileset dir="src">
                 <include name="**/*.properties" />
@@ -59,4 +59,33 @@
     <target name="clean" description="Remove all temporary files">
         <delete dir="tmp" />
     </target>
+
+    <target name="compile-tests" depends="compile">
+        <mkdir dir="tmp/test-classes"/>
+        <javac destdir="tmp/test-classes" target="1.7" source="1.7" debug="true">
+            <src path="test"/>
+            <classpath>
+                <path path="tmp/classes"/>
+                <path refid="project.classpath"/>
+            </classpath>
+        </javac>
+    </target>
+
+    <target name="test" depends="compile-tests">
+        <mkdir dir="tmp/test-results"/>
+        <junit maxmemory="64m" haltonfailure="false" failureproperty="tests-failed" fork="true">
+            <batchtest todir="tmp/test-results">
+                <fileset dir="tmp/test-classes" includes="**/*Test.class" excludes="**/Abstract*"/>
+                <formatter type="xml"/>
+                <formatter type="plain" usefile="false"/>
+            </batchtest>
+            <classpath>
+                <path path="tmp/classes"/>
+                <path path="tmp/test-classes"/>
+                <path refid="project.classpath"/>
+            </classpath>
+        </junit>
+        <fail if="tests-failed"/>
+    </target>
+
 </project>
