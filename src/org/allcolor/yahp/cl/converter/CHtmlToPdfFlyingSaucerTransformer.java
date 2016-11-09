@@ -532,7 +532,6 @@ public final class CHtmlToPdfFlyingSaucerTransformer implements IHtmlToPdfTransf
         renderer.getSharedContext().setBaseURL(urlForBase);
         mydoc = parser.parse(new StringReader(mydoc.toString()));
         mydoc.getDomConfig().setParameter("entities", Boolean.FALSE);
-        mydoc.normalizeDocument();
         renderer.setDocument(mydoc, urlForBase);
         renderer.layout();
 
