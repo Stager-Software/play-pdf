@@ -2,7 +2,6 @@ package org.allcolor.yahp.cl.converter;
 
 import com.lowagie.text.pdf.BaseFont;
 import org.allcolor.xml.parser.CShaniDomParser;
-import org.allcolor.xml.parser.CXmlParser;
 import org.allcolor.xml.parser.dom.ADocument;
 import org.allcolor.yahp.cl.converter.CDocumentCut.DocumentAndSize;
 import org.allcolor.yahp.converter.IHtmlToPdfTransformer;
@@ -10,7 +9,6 @@ import org.apache.commons.io.IOUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.w3c.dom.*;
-import org.w3c.tidy.Tidy;
 import org.xhtmlrenderer.extend.ReplacedElementFactory;
 import org.xhtmlrenderer.layout.SharedContext;
 import org.xhtmlrenderer.pdf.ExtendedITextReplacedElementFactory;
@@ -24,6 +22,8 @@ import java.text.NumberFormat;
 import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import static java.nio.charset.StandardCharsets.UTF_8;
 
 /**
  * This class transform an html document in a PDF.
@@ -119,8 +119,6 @@ public final class CHtmlToPdfFlyingSaucerTransformer implements IHtmlToPdfTransf
   private final ThreadLocal<Reference<CShaniDomParser>> tlparser = new ThreadLocal<>();
 
   private final ThreadLocal<Reference<_ITextRenderer>> tlrenderer = new ThreadLocal<>();
-
-  private final ThreadLocal<Reference<Tidy>> tltidy = new ThreadLocal<>();
 
   /**
    * Creates a new CHtmlToPdfFlyingSaucerTransformer object.
@@ -378,43 +376,6 @@ public final class CHtmlToPdfFlyingSaucerTransformer implements IHtmlToPdfTransf
     return ret;
   }
 
-  private Tidy getTidy() {
-    Reference<Tidy> ref = (Reference) tltidy.get();
-    Tidy tidy = ref == null ? null : ref.get();
-    if (tidy != null) {
-      return tidy;
-    }
-
-    Tidy ret = new Tidy();
-    ret.setInputEncoding("utf-8");
-    ret.setXHTML(true);
-    ret.setQuiet(true);
-    ret.setShowWarnings(false);
-    ret.setXmlOut(true);
-    ret.setFixComments(true);
-    ret.setEscapeCdata(true);
-    ret.setMakeBare(true);
-    ret.setMakeClean(true);
-    ret.setFixBackslash(true);
-    ret.setIndentContent(true);
-    ret.setLogicalEmphasis(true);
-    ret.setJoinClasses(true);
-    ret.setJoinStyles(true);
-    ret.setDocType("strict");
-    ret.setErrout(new PrintWriter(new Writer() {
-      @Override public void close() {
-      }
-
-      @Override public void flush() {
-      }
-
-      @Override public void write(final char[] cbuf, final int off, final int len) {
-      }
-    }));
-    tltidy.set(new SoftReference<>(ret));
-    return ret;
-  }
-
   /**
    * Transform the html document in the inputstream to a pdf in the
    * outputstream
@@ -431,25 +392,12 @@ public final class CHtmlToPdfFlyingSaucerTransformer implements IHtmlToPdfTransf
                                   final OutputStream out) throws CConvertException {
     List<File> files = new ArrayList<>();
     try {
-      final Tidy tidy = this.getTidy();
       final CShaniDomParser parser = this.getCShaniDomParser();
       final _ITextRenderer renderer = this.getITextRenderer();
 
-      String html;
-      try (Reader r = CXmlParser.getReader(in)) {
-        html = IOUtils.toString(r);
-      }
-      
-      ByteArrayOutputStream bout = new ByteArrayOutputStream();
-      tidy.parse(new ByteArrayInputStream(html.getBytes("utf-8")), bout);
-      
-      final String result = removeScript(new String(bout.toByteArray(), "utf-8"));
-      Document theDoc = parser
-          .parse(new InputStreamReader(new ByteArrayInputStream(
-              result.getBytes("utf-8")), "utf-8"));
-      if (theDoc.toString().isEmpty()) {
-        theDoc = parser.parse(new StringReader(removeScript(html)));
-      }
+      String html = IOUtils.toString(in, UTF_8);
+
+      Document theDoc = parser.parse(new StringReader(removeScript(html)));
       this.convertInputToVisibleHTML(theDoc);
       this.convertComboboxToVisibleHTML(theDoc);
       this.convertTextAreaToVisibleHTML(theDoc);

@@ -1,5 +1,11 @@
 ## Changelog
 
+### 1.5
+
+ * remove JTidy dependency
+ * remove re-formatting HTML code by JTidy
+   .. it broke PDF layout sometimes (because it inserted extra line breaks)
+
 ### 1.4
 
  * ignore url params when resolving local file (like /public/stylesheets/main.css?13564353)

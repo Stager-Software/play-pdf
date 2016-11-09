@@ -1,4 +1,4 @@
-self: play-pdf -> pdf 1.4
+self: play-pdf -> pdf 1.5
 
 require:
     - play [1.2,1.4]
@@ -10,6 +10,7 @@ require:
             - log4j
             - com.google.code.maven-play-plugin.org.allcolor.shanidom -> jaxen
             - com.google.code.maven-play-plugin.org.allcolor.shanidom -> shani-parser
+            - com.google.code.maven-play-plugin.net.sf.jtidy -> jtidy
 
 repositories:
     - bintray-allcolor:
