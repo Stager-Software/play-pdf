@@ -124,9 +124,15 @@ public class PDF {
    * @param args The template data
    */
   public static void renderPDF(Object... args) {
-    // stuuuuuupid typing
-    OutputStream os = null;
-    writePDF(os, args);
+    render(args);
+  }
+
+  public static void render(Object... args) {
+    writePDF(null, true, args);
+  }
+
+  public static void renderAsAttachment(Object... args) {
+    writePDF(null, false, args);
   }
 
   /**
@@ -137,12 +143,16 @@ public class PDF {
    */
   public static void writePDF(File file, Object... args) {
     try (OutputStream os = new FileOutputStream(file)) {
-      writePDF(os, args);
+      writePDF(os, true, args);
       os.flush();
     }
     catch (IOException e) {
       throw new UnexpectedException(e);
     }
+  }
+
+  public static void writePDF(OutputStream out, Object... args) {
+    writePDF(out, true, args);
   }
 
   /**
@@ -151,7 +161,7 @@ public class PDF {
    * @param out  the stream to render to, or null to render to the current Response object
    * @param args the template data
    */
-  public static void writePDF(OutputStream out, Object... args) {
+  public static void writePDF(OutputStream out, boolean inline, Object... args) {
     final Http.Request request = Http.Request.current();
     final String format = request.format;
 
@@ -185,7 +195,7 @@ public class PDF {
         docs.filename = FilenameUtils.getBaseName(singleDoc.template) + ".pdf";
     }
 
-    renderTemplateAsPDF(out, docs, args);
+    renderTemplateAsPDF(out, docs, inline, args);
   }
 
   static String resolveTemplateName(String templateName, Request request, String format) {
@@ -210,7 +220,7 @@ public class PDF {
    *
    * @param args The template data
    */
-  public static void renderTemplateAsPDF(OutputStream out, MultiPDFDocuments docs, Object... args) {
+  public static void renderTemplateAsPDF(OutputStream out, MultiPDFDocuments docs, boolean inline, Object... args) {
     Scope.RenderArgs templateBinding = Scope.RenderArgs.current();
     for (Object o : args) {
       List<String> names = LocalvariablesNamesEnhancer.LocalVariablesNamesTracer.getAllLocalVariableNames(o);
@@ -231,10 +241,10 @@ public class PDF {
     try {
       if (out == null) {
         // we're rendering to the current Response object
-        throw new RenderPDFTemplate(docs, templateBinding.data);
+        throw new RenderPDFTemplate(docs, inline, templateBinding.data);
       }
       else {
-        RenderPDFTemplate renderer = new RenderPDFTemplate(docs, templateBinding.data);
+        RenderPDFTemplate renderer = new RenderPDFTemplate(docs, inline, templateBinding.data);
         renderer.writePDF(out, Http.Request.current());
       }
     }

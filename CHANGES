@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.7
+
+ * add method PDF.renderAsAttachment() that DOWNLOADS pdf instead of opening it in browser (Content-Disposition=attachment)
+
 ### 1.6
 
  * do not normalize HTML
