@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.8
+
+ * add class PDFRenderer with non-static methods - useful for mocking in tests
+
 ### 1.7
 
  * add method PDF.renderAsAttachment() that DOWNLOADS pdf instead of opening it in browser (Content-Disposition=attachment)
