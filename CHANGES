@@ -1,5 +1,9 @@
 ## Changelog
 
+### 1.8.1
+
+ * add methods PDFRenderer.renderPDF(Map<String, Object> arguments)
+
 ### 1.8
 
  * add class PDFRenderer with non-static methods - useful for mocking in tests
