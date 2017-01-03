@@ -184,18 +184,30 @@ public class PDF {
       }
     }
     if (docs == null) {
-      docs = new MultiPDFDocuments();
-      docs.add(singleDoc);
       if (singleDoc.template == null) {
-        singleDoc.template = request.action.replace(".", "/") + "." + (format == null ? "html" : format);
+        singleDoc.template = templateNameFromAction(format);
       }
-      if (singleDoc.options != null && singleDoc.options.filename != null)
-        docs.filename = singleDoc.options.filename;
-      else
-        docs.filename = FilenameUtils.getBaseName(singleDoc.template) + ".pdf";
+      docs = createMultiPDFDocuments(singleDoc);
     }
 
     renderTemplateAsPDF(out, docs, inline, args);
+  }
+
+  private static MultiPDFDocuments createMultiPDFDocuments(PDFDocument singleDoc) {
+    MultiPDFDocuments docs = new MultiPDFDocuments();
+    docs.add(singleDoc);
+    docs.filename = fileName(singleDoc);
+    return docs;
+  }
+
+  private static String fileName(PDFDocument singleDoc) {
+    return singleDoc.options != null && singleDoc.options.filename != null ?
+        singleDoc.options.filename :
+        FilenameUtils.getBaseName(singleDoc.template) + ".pdf";
+  }
+
+  static String templateNameFromAction(String format) {
+    return Request.current().action.replace(".", "/") + "." + (format == null ? "html" : format);
   }
 
   static String resolveTemplateName(String templateName, Request request, String format) {
@@ -215,19 +227,37 @@ public class PDF {
     return templateName;
   }
 
+  public static void renderTemplateAsPDF(String templateName, boolean inline, Map<String, Object> args) {
+    PDF.PDFDocument singleDoc = new PDF.PDFDocument();
+    singleDoc.template = templateName;
+    PDF.MultiPDFDocuments docs = createMultiPDFDocuments(singleDoc);
+    renderTemplateAsPDF(null, docs, inline, args);
+  }
+
   /**
    * Render a specific template
    *
    * @param args The template data
    */
   public static void renderTemplateAsPDF(OutputStream out, MultiPDFDocuments docs, boolean inline, Object... args) {
-    Scope.RenderArgs templateBinding = Scope.RenderArgs.current();
+    Map<String, Object> arguments = new HashMap<>();
     for (Object o : args) {
       List<String> names = LocalvariablesNamesEnhancer.LocalVariablesNamesTracer.getAllLocalVariableNames(o);
       for (String name : names) {
-        templateBinding.put(name, o);
+        arguments.put(name, o);
       }
     }
+    renderTemplateAsPDF(out, docs, inline, arguments);
+  }
+
+  /**
+   * Render a specific template
+   *
+   * @param args The template data
+   */
+  static void renderTemplateAsPDF(OutputStream out, MultiPDFDocuments docs, boolean inline, Map<String, Object> args) {
+    Scope.RenderArgs templateBinding = Scope.RenderArgs.current();
+    templateBinding.data.putAll(args);
     templateBinding.put("session", Scope.Session.current());
     templateBinding.put("request", Http.Request.current());
     templateBinding.put("flash", Scope.Flash.current());

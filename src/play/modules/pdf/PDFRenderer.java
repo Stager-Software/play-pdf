@@ -4,6 +4,8 @@ import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 
+import static play.modules.pdf.PDF.renderTemplateAsPDF;
+
 /**
  * Usage example:
  * 
@@ -24,13 +26,11 @@ public class PDFRenderer {
   }
   
   public void renderPDF(Map<String, Object> arguments) {
-    // TODO Use another method that uses `arguments` instead of `LocalvariablesNamesEnhancer`
-    PDF.renderPDF(arguments);
+    renderTemplateAsPDF(PDF.templateNameFromAction("html"), true, arguments);
   }
 
   public void renderPDF(String templateName, Map<String, Object> arguments) {
-    // TODO Use another method that uses `arguments` instead of `LocalvariablesNamesEnhancer`
-    PDF.renderPDF(templateName, arguments);
+    renderTemplateAsPDF(templateName, true, arguments);
   }
 
   public class Builder {
