@@ -3,6 +3,7 @@
 ### 1.9
 
  * fix methods PDFRenderer.renderPDF(Map<String, Object> arguments) to work without play enhancers
+ * add methods to PDFRenderer: pageSize(), inline(), fileName()
 
 ### 1.8.1
 

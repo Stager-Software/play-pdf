@@ -1,5 +1,7 @@
 package play.modules.pdf;
 
+import org.allcolor.yahp.converter.IHtmlToPdfTransformer;
+
 import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
@@ -25,16 +27,19 @@ public class PDFRenderer {
     return new Builder(name, value);
   }
   
-  public void renderPDF(Map<String, Object> arguments) {
-    renderTemplateAsPDF(PDF.templateNameFromAction("html"), true, arguments);
+  public void renderPDF(Map<String, Object> arguments, boolean inline, PDF.Options options) {
+    renderTemplateAsPDF(PDF.templateNameFromAction("html"), arguments, inline, options);
   }
 
-  public void renderPDF(String templateName, Map<String, Object> arguments) {
-    renderTemplateAsPDF(templateName, true, arguments);
+  public void renderPDF(String templateName, Map<String, Object> arguments, boolean inline, PDF.Options options) {
+    renderTemplateAsPDF(templateName, arguments, inline, options);
   }
 
   public class Builder {
     private final Map<String, Object> arguments = new HashMap<>();
+    private boolean inline = true;
+    private String fileName;
+    private IHtmlToPdfTransformer.PageSize pageSize;
 
     private Builder(String name, Object value) {
       with(name, value);
@@ -46,11 +51,34 @@ public class PDFRenderer {
     }
 
     public void render() {
-      PDFRenderer.this.renderPDF(arguments);
+      PDFRenderer.this.renderPDF(arguments, inline, options());
+    }
+
+    private PDF.Options options() {
+      if (fileName == null && pageSize == null) return null;
+      PDF.Options options = new PDF.Options();
+      if (fileName != null) options.filename = fileName;
+      if (pageSize != null) options.pageSize = pageSize;
+      return options;
     }
 
     public void render(String templateName) {
-      PDFRenderer.this.renderPDF(templateName, arguments);
+      PDFRenderer.this.renderPDF(templateName, arguments, inline, options());
+    }
+
+    public Builder inline(boolean inline) {
+      this.inline = inline;
+      return this;
+    }
+
+    public Builder fileName(String fileName) {
+      this.fileName = fileName;
+      return this;
+    }
+
+    public Builder pageSize(IHtmlToPdfTransformer.PageSize pageSize) {
+      this.pageSize = pageSize;
+      return this;
     }
   }
 }

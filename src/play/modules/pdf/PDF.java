@@ -227,9 +227,10 @@ public class PDF {
     return templateName;
   }
 
-  public static void renderTemplateAsPDF(String templateName, boolean inline, Map<String, Object> args) {
+  public static void renderTemplateAsPDF(String templateName, Map<String, Object> args, boolean inline, PDF.Options options) {
     PDF.PDFDocument singleDoc = new PDF.PDFDocument();
     singleDoc.template = templateName;
+    singleDoc.options = options;
     PDF.MultiPDFDocuments docs = createMultiPDFDocuments(singleDoc);
     renderTemplateAsPDF(null, docs, inline, args);
   }
