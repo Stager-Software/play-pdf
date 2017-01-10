@@ -6,7 +6,7 @@ import javax.inject.Singleton;
 import java.util.HashMap;
 import java.util.Map;
 
-import static play.modules.pdf.PDF.renderTemplateAsPDF;
+import static play.modules.pdf.PDF.*;
 
 /**
  * Usage example:
@@ -54,16 +54,16 @@ public class PDFRenderer {
       PDFRenderer.this.renderPDF(arguments, inline, options());
     }
 
-    private PDF.Options options() {
-      if (fileName == null && pageSize == null) return null;
-      PDF.Options options = new PDF.Options();
-      if (fileName != null) options.filename = fileName;
-      if (pageSize != null) options.pageSize = pageSize;
-      return options;
-    }
-
     public void render(String templateName) {
       PDFRenderer.this.renderPDF(templateName, arguments, inline, options());
+    }
+
+    public byte[] generate(String templateName) {
+      return generateTemplateAsPDF(templateName, arguments, inline, options());
+    }
+
+    public byte[] generate() {
+      return generateTemplateAsPDF(PDF.templateNameFromAction("html"), arguments, inline, options());
     }
 
     public Builder inline(boolean inline) {
@@ -79,6 +79,14 @@ public class PDFRenderer {
     public Builder pageSize(IHtmlToPdfTransformer.PageSize pageSize) {
       this.pageSize = pageSize;
       return this;
+    }
+
+    private PDF.Options options() {
+      if (fileName == null && pageSize == null) return null;
+      PDF.Options options = new PDF.Options();
+      if (fileName != null) options.filename = fileName;
+      if (pageSize != null) options.pageSize = pageSize;
+      return options;
     }
   }
 }

@@ -1,4 +1,4 @@
-self: play-pdf -> pdf 1.9
+self: play-pdf -> pdf 2.0
 
 require:
     - play [1.2,1.4]
