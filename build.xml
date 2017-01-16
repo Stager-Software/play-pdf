@@ -46,8 +46,8 @@
     <target name="updateLibraries">
         <echo>Removing overridden classes from libraries</echo>
         <!-- Uses the 'zip' task instead of the 'jar' task to make sure the manifest is not modified at all-->
-        <zip destfile="lib/core-renderer.hacked.jar">
-            <zipfileset src="lib/core-renderer-${core-renderer.version}.jar" excludes="org/xhtmlrenderer/swing/NaiveUserAgent.*" />
+        <zip destfile="lib/flying-saucer-core-cbpatched.jar">
+            <zipfileset src="lib/flying-saucer-core-cbpatched.jar" excludes="org/xhtmlrenderer/swing/NaiveUserAgent.*" />
         </zip>
         <zip destfile="lib/yahp-internal.hacked.jar">
             <zipfileset src="lib/yahp-internal-${yahp-internal.version}.jar" excludes="org/allcolor/yahp/cl/converter/CHtmlToPdfFlyingSaucerTransformer*.*" />
