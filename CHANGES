@@ -1,5 +1,8 @@
 ## Changelog
 
+### 2.2
+ * fix bug that added the same title to all PDFs
+
 ### 2.1
  * flying saucer replaced with patched version that fixes rendering of '&', '<' etc. symbols.
 
