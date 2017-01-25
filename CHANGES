@@ -1,5 +1,8 @@
 ## Changelog
 
+### 1.6.1
+ * fix bug that added the same title to all PDFs
+
 ### 1.6
 
  * do not normalize HTML
