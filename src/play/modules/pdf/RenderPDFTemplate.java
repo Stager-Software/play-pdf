@@ -17,6 +17,7 @@ import play.mvc.Http.Header;
 import play.mvc.Http.Request;
 import play.mvc.Http.Response;
 import play.mvc.results.Result;
+import play.server.Server;
 import play.templates.Template;
 import play.templates.TemplateLoader;
 
@@ -113,7 +114,7 @@ public class RenderPDFTemplate extends Result {
 
   private void renderPDF(OutputStream out, Request request) throws Exception {
     Map<?, ?> properties = new HashMap<>(Play.configuration);
-    String uri = "http://localhost:" + Play.configuration.getProperty("http.port") + request.url;
+    String uri = "http://localhost:" + Server.httpPort + request.url;
     if (docs.documents.size() == 1) {
       renderDoc(docs.documents.get(0), uri, properties, out);
     }
