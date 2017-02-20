@@ -114,7 +114,7 @@ public class RenderPDFTemplate extends Result {
 
   private void renderPDF(OutputStream out, Request request) throws Exception {
     Map<?, ?> properties = new HashMap<>(Play.configuration);
-    String uri = "http://localhost:" + Server.httpPort + request.url;
+    String uri = request == null ? "" : ("http://localhost:" + Server.httpPort + request.url);
     if (docs.documents.size() == 1) {
       renderDoc(docs.documents.get(0), uri, properties, out);
     }
