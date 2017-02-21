@@ -1,5 +1,8 @@
 ## Changelog
 
+### 2.5.1
+ * fix entity support
+
 ### 2.5
  * fix random font error (play-pdf could not find some fonts or styles): properly remove original class NaiveUserAgent from jar
  * upgrade to Java 8
