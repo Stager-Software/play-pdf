@@ -1,7 +1,7 @@
-self: play-pdf -> pdf 2.4.2
+self: play-pdf -> pdf 2.5
 
 require:
-    - play [1.2,1.4]
+    - play [1.2,1.5]
     - local-jar -> flying-saucer-core-cbpatched latest.integration
     - local-jar -> flying-saucer-pdf-cbpatched latest.integration
     - org.allcolor -> shaniparser 1.4.22

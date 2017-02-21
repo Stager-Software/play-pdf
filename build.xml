@@ -37,7 +37,7 @@
 
     <target name="compile" depends="clean">
         <mkdir dir="tmp/classes" />
-        <javac srcdir="src" destdir="tmp/classes" target="1.7" debug="true" includeantruntime="false">
+        <javac srcdir="src" destdir="tmp/classes" target="1.8" debug="true" includeantruntime="false">
             <classpath refid="project.classpath" />
         </javac>
     </target>
@@ -46,7 +46,7 @@
     <target name="updateLibraries">
         <echo>Removing overridden classes from libraries</echo>
         <!-- Uses the 'zip' task instead of the 'jar' task to make sure the manifest is not modified at all-->
-        <zip destfile="lib/flying-saucer-core-cbpatched.jar">
+        <zip destfile="lib/flying-saucer-core-hacked.jar">
             <zipfileset src="lib/flying-saucer-core-cbpatched.jar" excludes="org/xhtmlrenderer/swing/NaiveUserAgent.*" />
         </zip>
         <zip destfile="lib/yahp-internal.hacked.jar">
@@ -54,6 +54,7 @@
         </zip>
         <delete file="lib/core-renderer-${core-renderer.version}.jar"/>
         <delete file="lib/yahp-internal-${yahp-internal.version}.jar"/>
+        <delete file="lib/flying-saucer-core-cbpatched.jar"/>
     </target>
 
     <target name="clean" description="Remove all temporary files">
@@ -62,7 +63,7 @@
 
     <target name="compile-tests" depends="compile">
         <mkdir dir="tmp/test-classes"/>
-        <javac destdir="tmp/test-classes" target="1.7" source="1.7" debug="true">
+        <javac destdir="tmp/test-classes" target="1.8" source="1.8" debug="true">
             <src path="test"/>
             <classpath>
                 <path path="tmp/classes"/>

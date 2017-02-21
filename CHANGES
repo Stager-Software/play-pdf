@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.5
+ * fix random font error (play-pdf could not find some fonts or styles): properly remove original class NaiveUserAgent from jar
+ * upgrade to Java 8
+
 ### 2.4.2
  * fix PDF generation in job (when current http request is missing)
 
