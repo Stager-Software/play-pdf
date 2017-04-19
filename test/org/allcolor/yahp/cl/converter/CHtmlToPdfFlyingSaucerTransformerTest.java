@@ -24,7 +24,8 @@ public class CHtmlToPdfFlyingSaucerTransformerTest {
         "//]]>\n" +
         "</script>\n" +
         "</head>\n" +
-        "</html>";
+        "</html>\n" +
+        "<script src=\"/public/gen/main.js?16b1e5a0df\"></script>";
     assertEquals("<!DOCTYPE html>\n" +
         "<html lang=\"ru\" class=\"\" xmlns=\"http://www.w3.org/1999/xhtml\">\n" +
         "  <head>\n" +
@@ -34,6 +35,12 @@ public class CHtmlToPdfFlyingSaucerTransformerTest {
         "\n" +
         "\n" +
         "</head>\n" +
-        "</html>", removeScript(html));
+        "</html>\n", removeScript(html));
+    
+    assertEquals("", removeScript("<script src=\"/public/gen/main.js?16b1e5a0df\"></script>"));
+    assertEquals("", removeScript("<script></script>"));
+    assertEquals("foobar", removeScript("foo<script></script>bar"));
+    assertEquals("foo", removeScript("foo<script></script>"));
+    assertEquals("bar", removeScript("<script></script>bar"));
   }
 }

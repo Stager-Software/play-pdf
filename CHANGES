@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.6
+ * fix major performance issue in method org.allcolor.yahp.cl.converter.CHtmlToPdfFlyingSaucerTransformer.removeScript()
+   (it performed `String.substring()` and `String.replace()` billion times when trying to remove <script> tags from html)
+
 ### 2.5.1
  * fix entity support
 

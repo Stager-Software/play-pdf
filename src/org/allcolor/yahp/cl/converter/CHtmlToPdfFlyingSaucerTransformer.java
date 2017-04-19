@@ -86,34 +86,19 @@ public final class CHtmlToPdfFlyingSaucerTransformer implements IHtmlToPdfTransf
     }
   }
 
-  static String removeScript(String a) {
-    final List<String> toRemove = new ArrayList<>();
-    final Pattern p = Pattern.compile("(<script\\s*)");
-    final Matcher m = p.matcher(a);
-    int start = 0;
-    while (m.find(start)) {
-      final int is = m.start();
-      int ie = m.start();
-      while (ie < a.length()) {
-        if (a.substring(ie).startsWith("</script>")) {
-          ie = ie + 9;
-          break;
-        }
-        else {
-          ie++;
-        }
-      }
-      start = ie + 1;
-      toRemove.add(a.substring(is, ie));
-      if (start >= a.length()) {
-        break;
-      }
+  static String removeScript(String html) {
+    int nextScriptStart = html.indexOf("<script");
+    if (nextScriptStart == -1) return html;
+
+    StringBuilder sb = new StringBuilder(html.length() - 16);
+    int i = 0;
+    while (nextScriptStart > -1) {
+      sb.append(html, i, nextScriptStart);
+      i = html.indexOf("</script>", nextScriptStart) + 9;
+      nextScriptStart = html.indexOf("<script ", i);
     }
-    for (String rem : toRemove) {
-      int index = a.indexOf(rem);
-      a = a.substring(0, index) + a.substring(index + rem.length());
-    }
-    return a;
+    sb.append(html, i, html.length());
+    return sb.toString();
   }
 
   private final ThreadLocal<Reference<CShaniDomParser>> tlparser = new ThreadLocal<>();
