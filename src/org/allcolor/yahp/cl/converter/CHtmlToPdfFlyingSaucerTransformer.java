@@ -20,8 +20,6 @@ import java.lang.ref.Reference;
 import java.lang.ref.SoftReference;
 import java.text.NumberFormat;
 import java.util.*;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import static java.nio.charset.StandardCharsets.UTF_8;
 
@@ -95,7 +93,7 @@ public final class CHtmlToPdfFlyingSaucerTransformer implements IHtmlToPdfTransf
     while (nextScriptStart > -1) {
       sb.append(html, i, nextScriptStart);
       i = html.indexOf("</script>", nextScriptStart) + 9;
-      nextScriptStart = html.indexOf("<script ", i);
+      nextScriptStart = html.indexOf("<script", i);
     }
     sb.append(html, i, html.length());
     return sb.toString();

@@ -1,13 +1,23 @@
 package org.allcolor.yahp.cl.converter;
 
 import org.junit.Test;
-
 import static org.allcolor.yahp.cl.converter.CHtmlToPdfFlyingSaucerTransformer.removeScript;
 import static org.junit.Assert.*;
 
 public class CHtmlToPdfFlyingSaucerTransformerTest {
   @Test
   public void removesScriptTagFromHtml() {
+    assertEquals("", removeScript("<script src=\"/public/gen/main.js?16b1e5a0df\"></script>"));
+    assertEquals("", removeScript("<script></script>"));
+    assertEquals("", removeScript("<script></script><script></script>"));
+    assertEquals("", removeScript("<script>foo</script><script>bar</script>"));
+    assertEquals("foobar", removeScript("foo<script></script>bar"));
+    assertEquals("foo", removeScript("foo<script></script>"));
+    assertEquals("bar", removeScript("<script></script>bar"));
+  }
+
+  @Test
+  public void removesScriptTagFromHtml_realisticExample() {
     String html = "<!DOCTYPE html>\n" +
         "<html lang=\"ru\" class=\"\" xmlns=\"http://www.w3.org/1999/xhtml\">\n" +
         "  <head>\n" +
@@ -25,6 +35,7 @@ public class CHtmlToPdfFlyingSaucerTransformerTest {
         "</script>\n" +
         "</head>\n" +
         "</html>\n" +
+        "<script>$.migrateMute = false;</script>\n" +
         "<script src=\"/public/gen/main.js?16b1e5a0df\"></script>";
     assertEquals("<!DOCTYPE html>\n" +
         "<html lang=\"ru\" class=\"\" xmlns=\"http://www.w3.org/1999/xhtml\">\n" +
@@ -35,12 +46,6 @@ public class CHtmlToPdfFlyingSaucerTransformerTest {
         "\n" +
         "\n" +
         "</head>\n" +
-        "</html>\n", removeScript(html));
-    
-    assertEquals("", removeScript("<script src=\"/public/gen/main.js?16b1e5a0df\"></script>"));
-    assertEquals("", removeScript("<script></script>"));
-    assertEquals("foobar", removeScript("foo<script></script>bar"));
-    assertEquals("foo", removeScript("foo<script></script>"));
-    assertEquals("bar", removeScript("<script></script>bar"));
+        "</html>\n\n", removeScript(html));
   }
 }
