@@ -16,8 +16,6 @@ import org.xhtmlrenderer.pdf.ITextOutputDevice;
 import org.xhtmlrenderer.pdf.ITextRenderer;
 
 import java.io.*;
-import java.lang.ref.Reference;
-import java.lang.ref.SoftReference;
 import java.text.NumberFormat;
 import java.util.*;
 
@@ -98,8 +96,6 @@ public final class CHtmlToPdfFlyingSaucerTransformer implements IHtmlToPdfTransf
     sb.append(html, i, html.length());
     return sb.toString();
   }
-
-  private final ThreadLocal<Reference<CShaniDomParser>> tlparser = new ThreadLocal<>();
 
   /**
    * Creates a new CHtmlToPdfFlyingSaucerTransformer object.
@@ -332,17 +328,10 @@ public final class CHtmlToPdfFlyingSaucerTransformer implements IHtmlToPdfTransf
 
   }
 
-  private CShaniDomParser getCShaniDomParser() {
-    Reference<CShaniDomParser> ref = tlparser.get();
-    CShaniDomParser parser = ref == null ? null : ref.get();
-    if (parser != null) {
-      return parser;
-    }
-
+  private CShaniDomParser createCShaniDomParser() {
     CShaniDomParser ret = new CShaniDomParser(true, false);
     ret.setAutodoctype(false);
     ret.setIgnoreDTD(true);
-    this.tlparser.set(new SoftReference<>(ret));
     return ret;
   }
 
@@ -362,7 +351,7 @@ public final class CHtmlToPdfFlyingSaucerTransformer implements IHtmlToPdfTransf
                                   final OutputStream out) throws CConvertException {
     List<File> files = new ArrayList<>();
     try {
-      final CShaniDomParser parser = this.getCShaniDomParser();
+      final CShaniDomParser parser = createCShaniDomParser();
       final _ITextRenderer renderer = new _ITextRenderer();
 
       String html = IOUtils.toString(in, UTF_8);

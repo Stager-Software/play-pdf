@@ -3,6 +3,7 @@
 ### 2.7
  * Don't hold ITextRenderer in ThreadLocal - it seems to cause memory leaks
     * and this object is anyway reset when play-pdf starts generating next PDF in the same thread
+ * Don't hold CShaniDomParser in ThreadLocal - I don't believe it brings any benefit
 
 ### 2.6.1
  * add support for <script> tag without attributes
