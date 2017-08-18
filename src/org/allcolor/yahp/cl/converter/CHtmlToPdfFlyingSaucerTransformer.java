@@ -101,8 +101,6 @@ public final class CHtmlToPdfFlyingSaucerTransformer implements IHtmlToPdfTransf
 
   private final ThreadLocal<Reference<CShaniDomParser>> tlparser = new ThreadLocal<>();
 
-  private final ThreadLocal<Reference<_ITextRenderer>> tlrenderer = new ThreadLocal<>();
-
   /**
    * Creates a new CHtmlToPdfFlyingSaucerTransformer object.
    */
@@ -348,17 +346,6 @@ public final class CHtmlToPdfFlyingSaucerTransformer implements IHtmlToPdfTransf
     return ret;
   }
 
-  private _ITextRenderer getITextRenderer() {
-    Reference<_ITextRenderer> ref = tlrenderer.get();
-    _ITextRenderer renderer = ref == null ? null : ref.get();
-    if (renderer != null) {
-      return renderer;
-    }
-    _ITextRenderer ret = new _ITextRenderer();
-    tlrenderer.set(new SoftReference<>(ret));
-    return ret;
-  }
-
   /**
    * Transform the html document in the inputstream to a pdf in the
    * outputstream
@@ -376,7 +363,7 @@ public final class CHtmlToPdfFlyingSaucerTransformer implements IHtmlToPdfTransf
     List<File> files = new ArrayList<>();
     try {
       final CShaniDomParser parser = this.getCShaniDomParser();
-      final _ITextRenderer renderer = this.getITextRenderer();
+      final _ITextRenderer renderer = new _ITextRenderer();
 
       String html = IOUtils.toString(in, UTF_8);
 

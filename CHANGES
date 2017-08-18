@@ -1,5 +1,9 @@
 ## Changelog
 
+### 2.7
+ * Don't hold ITextRenderer in ThreadLocal - it seems to cause memory leaks
+    * and this object is anyway reset when play-pdf starts generating next PDF in the same thread
+
 ### 2.6.1
  * add support for <script> tag without attributes
 
